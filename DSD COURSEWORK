@@ -1,0 +1,101 @@
+CREATE TABLE DEPARTMENT (
+    department_ID SERIAL PRIMARY KEY,
+    department_type VARCHAR(20),
+    department_name VARCHAR(30),
+    size INT
+);
+
+CREATE TABLE HEADTEACHER (
+    staff_ID SERIAL PRIMARY KEY,
+    department_ID INT,
+    FOREIGN KEY (department_ID) REFERENCES DEPARTMENT(department_ID)
+);
+
+CREATE TABLE SUBJECT (
+    subject_ID SERIAL PRIMARY KEY,
+    department_ID INT,
+    subject_Name VARCHAR(30),
+    FOREIGN KEY (department_ID) REFERENCES DEPARTMENT(department_ID)
+);
+
+CREATE TABLE STUDENT (
+    student_ID SERIAL PRIMARY KEY,
+    first_Name VARCHAR(30),
+    middle_name VARCHAR(30),
+    last_Name VARCHAR(30),
+    email VARCHAR(20),
+    password VARCHAR(30)
+);
+
+CREATE TABLE STAFF (
+    staff_ID SERIAL PRIMARY KEY,
+    course_id VARCHAR(20),
+    head_of_department BOOLEAN,
+    first_name VARCHAR(30),
+    middle_name VARCHAR(30),
+    last_name VARCHAR(30),
+    password VARCHAR(30)
+);
+
+CREATE TABLE GRADE (
+    student_ID VARCHAR(20),
+    course_ID VARCHAR(30),
+    subject_ID VARCHAR(30),
+    grade VARCHAR(2),
+    PRIMARY KEY (student_ID, course_ID, subject_ID),
+    FOREIGN KEY (student_ID) REFERENCES STUDENT(student_ID),
+    FOREIGN KEY (course_ID) REFERENCES COURSE(course_id),
+    FOREIGN KEY (subject_ID) REFERENCES SUBJECT(subject_ID)
+);
+
+CREATE TABLE PAYMENTS (
+    staff_ID INT,
+    account_number SERIAL,
+    sort_code INT,
+    hours INT,
+    payroll INT,
+    notice_address VARCHAR(200),
+    PRIMARY KEY (staff_ID),
+    FOREIGN KEY (staff_ID) REFERENCES STAFF(staff_ID)
+);
+
+CREATE TABLE SET (
+    course_ID VARCHAR(20),
+    department_ID INT,
+    student_ID INT,
+    academic_level INT,
+    PRIMARY KEY (course_ID, department_ID, student_ID),
+    FOREIGN KEY (course_ID) REFERENCES COURSE(course_id),
+    FOREIGN KEY (department_ID) REFERENCES DEPARTMENT(department_ID),
+    FOREIGN KEY (student_ID) REFERENCES STUDENT(student_ID)
+);
+
+CREATE TABLE PARENT_GUARDIAN (
+    student_ID INT,
+    first_name VARCHAR(30),
+    last_name VARCHAR(30),
+    email VARCHAR(30),
+    phone_number VARCHAR(12),
+    password VARCHAR(30),
+    PRIMARY KEY (student_ID),
+    FOREIGN KEY (student_ID) REFERENCES STUDENT(student_ID)
+);
+
+CREATE TABLE COURSE (
+    course_id VARCHAR(20) PRIMARY KEY,
+    subject_ID INT,
+    department_ID INT,
+    staff_ID INT,
+    FOREIGN KEY (subject_ID) REFERENCES SUBJECT(subject_ID),
+    FOREIGN KEY (department_ID) REFERENCES DEPARTMENT(department_ID),
+    FOREIGN KEY (staff_ID) REFERENCES STAFF(staff_ID)
+);
+
+CREATE TABLE SESSION (
+    session_ID SERIAL PRIMARY KEY,
+    staff_ID INT,
+    no_Of_Students INT,
+    next_session DATE,
+    completed BOOLEAN,
+    FOREIGN KEY (staff_ID) REFERENCES STAFF(staff_ID)
+);
